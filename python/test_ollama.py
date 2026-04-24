@@ -73,8 +73,8 @@ while True:
 DataFrame Information:
 Columns: {list(df.columns)}
 Data types: {df.dtypes.to_dict()}
-Sample data (first 5 rows):
-{df.head().to_string()}
+Sample data (first 3 rows):
+{df.head(3).to_string()}
 """
 
     full_prompt = data_info + f"""
@@ -88,10 +88,11 @@ Task: {prompt}
 """
 
     result = subprocess.run(
-        ["ollama", "run", "llama3", full_prompt],
+        ["ollama", "run", "phi3-small:latest", full_prompt],
         text=True,
         capture_output=True,
-        encoding="utf-8"
+        encoding="utf-8",
+        timeout=60  # Thêm timeout 60 giây để tránh chờ quá lâu
     )
     raw_output = result.stdout
     stderr_output = result.stderr
