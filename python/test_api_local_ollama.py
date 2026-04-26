@@ -20,7 +20,7 @@ OLLAMA_ENDPOINT_CANDIDATES = [
     "http://localhost:11434/v1/completions",
     "http://127.0.0.1:11434/v1/completions",
 ]
-OLLAMA_MODEL = "llama3"
+OLLAMA_MODEL = "llama3.2-lite"
 OLLAMA_TIMEOUT = 120
 OLLAMA_MAX_TOKENS = 384  
 OLLAMA_TEMPERATURE = 0.2  
@@ -301,6 +301,7 @@ Use seaborn or matplotlib to create visualizations.
 Use dataframe df (a pandas DataFrame).
 When referring to columns with hyphens or spaces, use bracket notation like df['engine-size'] or the underscore alias like df['engine_size'].
 IMPORTANT: End your code with plt.show() to display the plot.
+Rule 4: Always explicitly create a new figure at the beginning of your code using plt.figure(figsize=(8, 6)) to ensure a fresh, correctly sized canvas.
 Do not explain anything — only output runnable Python code.
 Task: {prompt}
 """
@@ -362,6 +363,8 @@ Task: {prompt}
                 continue
     
         try:
+            # Clear any existing figures before executing new code to prevent overlapping charts
+            plt.close('all')
             exec(compiled, {"df": df, "plt": plt, "sns": sns, "pd": pd, "np": np})
             # Nếu code không gọi plt.show(), tự động gọi nếu có figure
             if plt.get_fignums():
