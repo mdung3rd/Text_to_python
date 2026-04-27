@@ -15,9 +15,6 @@ from typing import List, Dict, Tuple
 plt.rcParams['figure.max_open_warning'] = 50
 
 OLLAMA_ENDPOINT_CANDIDATES = [
-    "http://localhost:11434/api/generate",
-    "http://127.0.0.1:11434/api/generate",
-    "http://localhost:11434/v1/completions",
     "http://127.0.0.1:11434/v1/completions",
 ]
 OLLAMA_MODEL = "llama3.2-lite"
@@ -164,6 +161,11 @@ class SimpleRAG:
             },
             {
                 'type': 'example',
+                'content': "For pie chart with percentages: counts = df['category'].value_counts(); plt.figure(figsize=(8, 6)); plt.pie(counts, labels=counts.index, autopct='%1.1f%%'); plt.title('Distribution')",
+                'keywords': ['pie', 'pie chart', 'percentage', 'distribution', 'autopct']
+            },
+            {
+                'type': 'example',
                 'content': "For correlation heatmap: sns.heatmap(df.corr(), annot=True, cmap='coolwarm'); plt.title('Correlation Matrix')",
                 'keywords': ['correlation', 'heatmap', 'corr', 'matrix']
             },
@@ -302,6 +304,8 @@ Use dataframe df (a pandas DataFrame).
 When referring to columns with hyphens or spaces, use bracket notation like df['engine-size'] or the underscore alias like df['engine_size'].
 IMPORTANT: End your code with plt.show() to display the plot.
 Rule 4: Always explicitly create a new figure at the beginning of your code using plt.figure(figsize=(8, 6)) to ensure a fresh, correctly sized canvas.
+Rule 5: CRITICAL - If the task explicitly requests a pie chart, MUST use plt.pie() with autopct parameter for percentage labels. Do NOT use bar chart instead of pie chart.
+Rule 6: CRITICAL - If the task explicitly requests a bar chart, use bar charts. If requesting pie chart, use ONLY pie charts.
 Do not explain anything — only output runnable Python code.
 Task: {prompt}
 """
