@@ -5,10 +5,7 @@ import pandas as pd
 from openai import OpenAI
 from difflib import SequenceMatcher
 
-# Khởi tạo client OpenAI-compatible để gọi Groq API.
-# Điền trực tiếp Groq API key của bạn vào giữa dấu nháy bên dưới.
-# Lưu ý: Không upload file này lên GitHub/public nếu có API key thật.
-GROQ_API_KEY = "PASTE_YOUR_GROQ_API_KEY_HERE"
+GROQ_API_KEY = "PASTE_HERE"
 
 client = OpenAI(
     api_key=GROQ_API_KEY,
