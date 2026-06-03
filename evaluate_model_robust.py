@@ -30,9 +30,10 @@ OLLAMA_TEMPERATURE = 0.2
 OLLAMA_TOP_P = 0.8
 
 # Paths
-CSV_QUERIES_PATH = r"C:\vscode\python\100_queries_from_automobile.csv"
+PROJECT_DIR = r"C:\Users\DELL\Desktop\python_viz"
+CSV_QUERIES_PATH = os.path.join(PROJECT_DIR, "100_queries_from_automobile.csv")
 CSV_AUTOMOBILE_PATH = r"C:\Users\DELL\Downloads\archive\Automobile_data.csv"
-OUTPUT_DIR = r"C:\vscode\python\test_results"
+OUTPUT_DIR = os.path.join(PROJECT_DIR, "test_results")
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 

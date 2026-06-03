@@ -9,8 +9,8 @@ import subprocess
 import pandas as pd
 from datetime import datetime
 
-# Đường dẫn
-SCRIPT_DIR = r"C:\vscode\python"
+# Đường dẫn project hiện tại
+SCRIPT_DIR = r"C:\Users\DELL\Desktop\python_viz"
 EVAL_SCRIPT_OLLAMA = os.path.join(SCRIPT_DIR, "evaluate_model_robust.py")
 EVAL_SCRIPT_CLOUDAPI = os.path.join(SCRIPT_DIR, "evaluate_model_cloudapi.py")
 RESULTS_DIR = os.path.join(SCRIPT_DIR, "test_results")
