@@ -1,293 +1,352 @@
-# 🧪 TEST & EVALUATE MODEL - COMPLETE SETUP
+# README_EVALUATION
 
-## 📦 Bạn vừa nhận được gì:
+Hướng dẫn ngắn gọn cách evaluate model sinh code vẽ biểu đồ cho dataset Automobile.
 
-### 3 Files chính:
+Project hỗ trợ 2 kiểu evaluate:
 
-1. **`evaluate_model_robust.py`** (150+ lines)
-   - Main evaluation script
-   - Test 100 queries từ CSV
-   - Tính toán metrics
-   - Lưu kết quả chi tiết
-
-2. **`run_evaluation.py`** (150+ lines)
-   - Interactive menu
-   - Dễ sử dụng
-   - Hiển thị kết quả ngay
-
-3. **`EVALUATION_GUIDE.md`**
-   - Hướng dẫn chi tiết
-   - Cách hiểu kết quả
-   - Tips & tricks
+1. **Local LLM**: dùng Ollama local.
+2. **Cloud API**: dùng OpenAI-compatible API, ví dụ Groq.
 
 ---
 
-## 🚀 QUICK START (3 bước):
+## 1. Các file chính
 
-### Bước 1: Khởi động Ollama
-```bash
-# Terminal 1 - Mở cmd hoặc PowerShell
+| File | Mục đích |
+|---|---|
+| `100_queries_from_automobile.csv` | Bộ 100 câu hỏi dùng để evaluate. |
+| `evaluate_model_robust.py` | Evaluate Local LLM/Ollama. |
+| `evaluate_model_cloudapi.py` | Evaluate Cloud API. |
+| `run_evaluation.py` | Menu chọn evaluate Local hoặc Cloud. |
+| `local_llm.py` | Chạy thử Local LLM dạng nhập prompt thủ công. |
+| `cloud_llm.py` | Chạy thử Cloud/Groq dạng nhập prompt thủ công. |
+| `query.py` | Sinh file queries test từ dataset Automobile. |
+
+---
+
+## 2. Cài thư viện
+
+```powershell
+pip install pandas requests matplotlib seaborn numpy openai
+```
+
+hoặc:
+
+```powershell
+py -m pip install pandas requests matplotlib seaborn numpy openai
+```
+
+---
+
+## 3. Kiểm tra đường dẫn dữ liệu
+
+Các file evaluation đang dùng dataset:
+
+```python
+C:\Users\DELL\Downloads\archive\Automobile_data.csv
+```
+
+Nếu máy khác không có đường dẫn này, sửa lại trong:
+
+- `evaluate_model_robust.py`
+- `evaluate_model_cloudapi.py`
+- `cloud_llm.py`
+- `local_llm.py`
+- `query.py`
+
+File queries dùng để evaluate:
+
+```text
+100_queries_from_automobile.csv
+```
+
+Format chính:
+
+```csv
+Query,Expected_Chart_Type,Required_Columns,Difficulty
+```
+
+---
+
+## 4. Evaluate Local LLM bằng Ollama
+
+File dùng:
+
+```text
+evaluate_model_robust.py
+```
+
+Model mặc định:
+
+```python
+OLLAMA_MODEL = "llama3.2-lite"
+```
+
+### Bước 1: chạy Ollama
+
+```powershell
 ollama serve
-# Chờ tới khi thấy "listening on"
 ```
 
-### Bước 2: Chạy evaluation
-```bash
-# Terminal 2 - Chạy script
-cd C:\vscode\python
-python run_evaluation.py
+Nếu chưa có model:
 
-# Chọn option 1 hoặc 3 để chạy test
-```
-
-### Bước 3: Xem kết quả
-- Kết quả sẽ hiển thị trong console
-- Files được lưu tại: `C:\vscode\python\test_results\`
-  - `evaluation_results_*.csv` - Chi tiết mỗi query
-  - `evaluation_summary_*.txt` - Tóm tắt
-
----
-
-## 📊 METRICS ĐƯỢC TÍNH:
-
-### 🎯 **Runnable Rate** (%)
-- Tỷ lệ % code sinh ra chạy được (không error)
-- Kiểm tra: Syntax errors, runtime errors
-- **Công thức**: `(Runnable count / Total) × 100%`
-
-### 📈 **Chart-Type Accuracy** (%)
-- Tỷ lệ % dự đoán đúng loại chart
-- So sánh: Code sinh ra vs Expected_Chart_Type trong CSV
-- **Công thức**: `(Correct count / Total) × 100%`
-
-### 🔀 **Chi tiết theo Chart Type**
-- Runnable rate cho mỗi loại: Bar, Scatter, Histogram, Boxplot, Pie, etc.
-- Accuracy cho mỗi loại
-
-### 🏆 **Chi tiết theo Difficulty**
-- Easy, Medium, Hard
-- Metrics riêng cho mỗi mức độ
-
----
-
-## 📋 CSV OUTPUT FORMAT:
-
-| Cột | Ý nghĩa |
-|-----|---------|
-| query_id | ID (1-100) |
-| query | Nội dung query |
-| expected_chart | Chart type mong đợi (Bar, Scatter, ...) |
-| detected_chart | Chart type phát hiện từ code |
-| chart_match | Có khớp không (Yes/No) |
-| runnable | Code chạy được không (Yes/No) |
-| error | Chi tiết lỗi (nếu có) |
-| api_time | Thời gian API call (seconds) |
-| code_length | Số ký tự code sinh ra |
-| difficulty | Mức độ khó (Easy/Medium/Hard) |
-
-**Ví dụ:**
-```
-query_id,query,expected_chart,detected_chart,chart_match,runnable,...
-1,"Plot the mean width grouped by aspiration.",Bar,Bar,Yes,Yes,...
-2,"Draw a scatter plot comparing city-mpg and price.",Scatter,Scatter,Yes,Yes,...
-3,"Show a histogram of price.",Histogram,Bar,No,Yes,...
-```
-
----
-
-## 🔧 CUSTOMIZE OPTIONS:
-
-### 1. Test ít queries hơn (để debug nhanh):
-```python
-# Trong evaluate_model.py, thay dòng:
-for idx, row in queries_df.iterrows():
-
-# Thành:
-for idx, row in queries_df.head(10).iterrows():  # Chỉ 10 queries
-```
-
-### 2. Đổi model Ollama:
-```python
-OLLAMA_MODEL = "mistral"  # thay vì "llama3.2-lite"
-OLLAMA_MODEL = "neural-chat"
-```
-
-### 3. Tăng/giảm timeout:
-```python
-OLLAMA_TIMEOUT = 180  # từ 120 lên 180 seconds
-```
-
-### 4. Điều chỉnh temperature (control randomness):
-```python
-OLLAMA_TEMPERATURE = 0.1  # từ 0.2 xuống 0.1 (ít random)
-```
-
----
-
-## 💡 HIỂU KẾT QUẢ:
-
-### Ví dụ output:
-```
-📈 OVERALL METRICS:
-   Total queries:          100
-   Runnable:               85/100 (85.0%)          ← 85% code chạy được
-   Chart type correct:     72/100 (72.0%)          ← 72% predict đúng
-   Accuracy (runnable):    72/85 (84.7%)           ← 84.7% đúng trong những cái chạy được
-
-📊 BY CHART TYPE:
-   Bar          | Count: 35 | Runnable: 32 (91.4%) | Correct: 28 (80.0%)
-   Scatter      | Count: 15 | Runnable: 13 (86.7%) | Correct: 11 (73.3%)
-   Histogram    | Count: 20 | Runnable: 18 (90.0%) | Correct: 15 (75.0%)
-```
-
-### Giải thích:
-- **Bar chart**: 35 queries
-  - 32 chạy được (91.4% runnable)
-  - 28 predict đúng (80% accuracy)
-  - → Model yếu nhất ở accuracy, mạnh ở runnable
-
----
-
-## 🐛 TROUBLESHOOTING:
-
-### ❌ "Cannot connect to Ollama"
-**Giải pháp:**
-```bash
-# Kiểm tra Ollama đang chạy:
-curl http://127.0.0.1:11434/api/tags
-
-# Nếu không, khởi động:
-ollama serve
-
-# Nếu model không có:
+```powershell
 ollama pull llama3.2-lite
 ```
 
-### ❌ "SyntaxError in generated code"
-**Nguyên nhân:** Model sinh code chứa lỗi syntax
-**Giải pháp:**
-1. Giảm temperature: `0.1` (ít random)
-2. Thêm ví dụ code tốt trong prompt
-3. Dùng model khác
+### Bước 2: chạy evaluation
 
-### ❌ Script quá chậm
-**Giải pháp:**
-1. Giảm `OLLAMA_MAX_TOKENS`: 384 → 256
-2. Giảm `OLLAMA_TEMPERATURE`: 0.2 → 0.1 (call lại nhanh hơn)
-3. Test 10 queries trước: `queries_df.head(10)`
+```powershell
+py evaluate_model_robust.py
+```
 
-### ❌ "ModuleNotFoundError"
-**Giải pháp:**
-```bash
-# Cài đặt thư viện cần thiết:
-pip install pandas requests matplotlib seaborn numpy
+hoặc:
+
+```powershell
+python evaluate_model_robust.py
+```
+
+Kết quả lưu trong:
+
+```text
+test_results/
+```
+
+Tên file:
+
+```text
+evaluation_results_robust_*.csv
+evaluation_summary_robust_*.txt
 ```
 
 ---
 
-## 📊 ANALYZE RESULTS:
+## 5. Evaluate Cloud API
 
-Sau khi có kết quả CSV, bạn có thể:
+File dùng:
 
-### 1. Mở trong Excel/Python:
+```text
+evaluate_model_cloudapi.py
+```
+
+Nếu dùng Groq, cấu hình client dạng:
+
 ```python
-import pandas as pd
+from openai import OpenAI
 
-df = pd.read_csv("C:\\vscode\\python\\test_results\\evaluation_results_*.csv")
+GROQ_API_KEY = "PASTE_YOUR_GROQ_API_KEY_HERE"
 
-# Lọc những cái lỗi
-failed = df[df['runnable'] == 'No']
-print(failed[['query', 'error']])
+client = OpenAI(
+    api_key=GROQ_API_KEY,
+    base_url="https://api.groq.com/openai/v1"
+)
 
-# Lọc predict sai chart
-wrong_chart = df[(df['chart_match'] == 'No') & (df['runnable'] == 'Yes')]
-print(wrong_chart[['query', 'expected_chart', 'detected_chart']])
+GROQ_MODEL = "llama-3.1-8b-instant"
 ```
 
-### 2. Tính toán riêng:
+Khi gọi API dùng:
+
 ```python
-# Runnable rate by difficulty
-easy = df[df['difficulty'] == 'Easy']
-print(f"Easy runnable: {(easy['runnable'] == 'Yes').sum() / len(easy)}")
+response = client.chat.completions.create(
+    model=GROQ_MODEL,
+    messages=[
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": full_prompt}
+    ]
+)
+```
+
+Chạy evaluation:
+
+```powershell
+py evaluate_model_cloudapi.py
+```
+
+hoặc:
+
+```powershell
+python evaluate_model_cloudapi.py
+```
+
+Kết quả lưu trong:
+
+```text
+test_results/
+```
+
+Tên file:
+
+```text
+evaluation_results_cloudapi_*.csv
+evaluation_summary_cloudapi_*.txt
 ```
 
 ---
 
-## 🎯 CẢI THIỆN MODEL:
+## 6. Chạy bằng menu
 
-Dựa vào kết quả, bạn có thể:
+Có thể dùng `run_evaluation.py` để chọn mode:
 
-### Nếu Runnable Rate thấp (< 70%):
-1. **Cải tiến prompt** - yêu cầu code chính xác hơn
-2. **Thêm ví dụ** - in-context learning
-3. **Giảm temperature** - ít lỗi
-4. **Đổi model** - thử model khác
+```powershell
+py run_evaluation.py
+```
 
-### Nếu Chart-Type Accuracy thấp (< 70%):
-1. **Explicit instruction** - "Generate a BAR chart using plt.bar()"
-2. **Prompt engineering** - yêu cầu rõ ràng loại chart
-3. **Few-shot learning** - thêm ví dụ code cho mỗi chart type
+Menu chính:
 
-### Nếu một chart type yếu (ví dụ Pie < 50%):
-1. Thêm ví dụ pie chart đặc biệt trong prompt
-2. Kiểm tra data xem có phù hợp với pie không
-3. Improve prompt cho pie charts
+```text
+1. Ollama Local
+2. Cloud API
+3. Compare both results
+4. Exit
+```
+
+Nên chọn:
+
+```text
+3. Run and show results
+```
+
+để vừa chạy evaluation vừa xem kết quả tóm tắt.
+
+Lưu ý: chức năng compare trong menu hiện mới báo `Coming soon`, chưa compare tự động.
 
 ---
 
-## 📝 NEXT STEPS:
+## 7. Metrics được tính
 
-1. **Chạy evaluation**: `python run_evaluation.py`
-2. **Xem kết quả**: CSV output
-3. **Phân tích**: Identify yếu điểm
-4. **Cải thiện**: Fix prompt/model
-5. **Re-test**: Chạy lại để so sánh
+Evaluation tính các chỉ số chính:
 
----
+| Metric | Ý nghĩa |
+|---|---|
+| `Runnable Rate` | Tỷ lệ code model sinh ra chạy được. |
+| `Chart-Type Accuracy` | Tỷ lệ model sinh đúng loại biểu đồ mong đợi. |
+| `Conditional Accuracy` | Accuracy tính trên các code chạy được. |
+| `By Chart Type` | Thống kê theo từng loại chart: Bar, Scatter, Histogram, Boxplot,... |
+| `By Difficulty` | Thống kê theo độ khó: Easy, Medium, Hard. |
 
-## 📚 FILES REFERENCE:
+Công thức:
 
-```
-C:\vscode\python\
-├── 100_queries_from_automobile.csv       ← Input: 100 queries
-├── test_api_local_ollama.py              ← Original test script
-├── evaluate_model.py                     ← Main evaluation script
-├── run_evaluation.py                     ← Interactive menu
-├── EVALUATION_GUIDE.md                   ← Detailed guide
-├── README_EVALUATION.md                  ← This file
-└── test_results/
-    ├── evaluation_results_YYYYMMDD_HHMMSS.csv
-    └── evaluation_summary_YYYYMMDD_HHMMSS.txt
-```
-
----
-
-## 🎓 KEY FORMULAS:
-
-### Runnable Rate:
-```
-Runnable Rate (%) = (# queries where code runs without error / total queries) × 100
-```
-
-### Chart-Type Accuracy:
-```
-Chart Accuracy (%) = (# queries where detected chart matches expected / total queries) × 100
-```
-
-### Conditional Accuracy (accuracy among runnable):
-```
-Conditional Accuracy (%) = (# runnable queries with correct chart / # runnable queries) × 100
+```text
+Runnable Rate = runnable / total * 100
+Chart-Type Accuracy = correct chart / total * 100
+Conditional Accuracy = correct chart among runnable / runnable * 100
 ```
 
 ---
 
-**Ready? Let's go! 🚀**
+## 8. File kết quả CSV
 
-```bash
-python C:\vscode\python\run_evaluation.py
+Output CSV có các cột chính:
+
+| Cột | Ý nghĩa |
+|---|---|
+| `query_id` | ID query. |
+| `query` | Nội dung yêu cầu. |
+| `expected_chart` | Loại chart mong đợi. |
+| `detected_chart` | Loại chart detect từ code sinh ra. |
+| `chart_match` | Đúng chart hay không. |
+| `runnable` | Code chạy được hay không. |
+| `error` | Lỗi nếu code không chạy được. |
+| `api_time` | Thời gian gọi model/API. |
+| `code_length` | Độ dài code sinh ra. |
+| `difficulty` | Độ khó query. |
+
+---
+
+## 9. Test nhanh ít queries
+
+Mặc định script chạy 100 queries:
+
+```python
+for idx, row in queries_df.iterrows():
+```
+
+Muốn test nhanh 10 câu thì sửa thành:
+
+```python
+for idx, row in queries_df.head(10).iterrows():
+```
+
+Có thể sửa trong:
+
+- `evaluate_model_robust.py`
+- `evaluate_model_cloudapi.py`
+
+---
+
+## 10. Lỗi thường gặp
+
+### Không tìm thấy file CSV
+
+Kiểm tra lại các biến path:
+
+```python
+CSV_QUERIES_PATH
+CSV_AUTOMOBILE_PATH
+OUTPUT_DIR
+SCRIPT_DIR
+```
+
+### Không kết nối được Ollama
+
+Chạy:
+
+```powershell
+ollama serve
+```
+
+Kiểm tra:
+
+```powershell
+curl http://127.0.0.1:11434/api/tags
+```
+
+### Cloud API lỗi key/model
+
+Kiểm tra:
+
+- API key đúng chưa.
+- `base_url` đúng chưa.
+- Tên model đúng chưa.
+
+Với Groq:
+
+```python
+base_url="https://api.groq.com/openai/v1"
+```
+
+### GitHub chặn push vì API key
+
+Không nên push API key thật. Đổi key thành placeholder trước khi commit:
+
+```python
+GROQ_API_KEY = "PASTE_YOUR_GROQ_API_KEY_HERE"
 ```
 
 ---
 
-*Created: 2024*
-*Purpose: Evaluate LLM code generation and chart type accuracy*
+## 11. Quy trình evaluate đề xuất
+
+### Local LLM
+
+```powershell
+ollama serve
+py evaluate_model_robust.py
+```
+
+### Cloud API
+
+```powershell
+py evaluate_model_cloudapi.py
+```
+
+### Menu
+
+```powershell
+py run_evaluation.py
+```
+
+Sau khi chạy xong, xem file kết quả trong:
+
+```text
+test_results/
+```
