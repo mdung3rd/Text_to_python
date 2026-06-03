@@ -1,14 +1,21 @@
+import os
 import re
 import sys
 import pandas as pd
 from openai import OpenAI
 from difflib import SequenceMatcher
 
-# Khởi tạo client OpenAI với cấu hình Local LLM Proxy
+# Khởi tạo client OpenAI-compatible để gọi Groq API.
+# Điền trực tiếp Groq API key của bạn vào giữa dấu nháy bên dưới.
+# Lưu ý: Không upload file này lên GitHub/public nếu có API key thật.
+GROQ_API_KEY = "PASTE_YOUR_GROQ_API_KEY_HERE"
+
 client = OpenAI(
-    api_key="freellmapi-fe1244540184bfbbf1c2865f09560591d9f660a0315e499a",
-    base_url="http://localhost:3001/v1"
+    api_key=GROQ_API_KEY,
+    base_url="https://api.groq.com/openai/v1"
 )
+
+GROQ_MODEL = "llama-3.1-8b-instant"
 
 # Đường dẫn file CSV
 CSV_PATH = r"C:\Users\DELL\Downloads\archive\Automobile_data.csv"
@@ -216,10 +223,10 @@ Dữ liệu đã được load vào biến 'df', bạn có thể sử dụng tr�
 Yêu cầu: {user_prompt}"""
     
     try:
-        # Gọi API với model "auto"
-        print("[*] Đang gọi API LLM Proxy...")
+        # Gọi Groq API thông qua OpenAI-compatible client
+        print("[*] Đang gọi Groq API...")
         response = client.chat.completions.create(
-            model="deepseek-chat",
+            model=GROQ_MODEL,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": full_prompt}
