@@ -1,0 +1,101 @@
+Query,Expected_Chart_Type,Required_Columns,Difficulty
+Plot the mean width grouped by aspiration.,Bar,"aspiration, width",Medium
+Draw a scatter plot comparing city-mpg and price.,Scatter,"city-mpg, price",Medium
+Show a bar chart of the average wheel-base for each num-of-cylinders.,Bar,"num-of-cylinders, wheel-base",Medium
+Visualize the distribution of height using a histogram.,Histogram,height,Easy
+Plot the mean normalized-losses grouped by make.,Bar,"make, normalized-losses",Medium
+Show a bar chart of the average wheel-base for each make.,Bar,"make, wheel-base",Medium
+Show a boxplot of stroke grouped by body-style to find outliers.,Boxplot,"body-style, stroke",Hard
+Visualize the distribution of horsepower using a histogram.,Histogram,horsepower,Easy
+Plot the mean width grouped by aspiration.,Bar,"aspiration, width",Medium
+Plot the mean engine-size grouped by drive-wheels.,Bar,"drive-wheels, engine-size",Medium
+Plot the mean peak-rpm grouped by engine-location.,Bar,"engine-location, peak-rpm",Medium
+Show a boxplot of price grouped by fuel-type to find outliers.,Boxplot,"fuel-type, price",Hard
+Show a boxplot of price grouped by fuel-type to find outliers.,Boxplot,"fuel-type, price",Hard
+Show a boxplot of peak-rpm grouped by engine-location to find outliers.,Boxplot,"engine-location, peak-rpm",Hard
+Show a boxplot of normalized-losses grouped by engine-location to find outliers.,Boxplot,"engine-location, normalized-losses",Hard
+Show a boxplot of width grouped by aspiration to find outliers.,Boxplot,"aspiration, width",Hard
+Plot a histogram for highway-mpg.,Histogram,highway-mpg,Easy
+Visualize the frequency of aspiration using a bar plot.,Bar,aspiration,Easy
+Visualize the distribution of peak-rpm using a histogram.,Histogram,peak-rpm,Easy
+Draw a scatter plot comparing width and engine-size.,Scatter,"width, engine-size",Medium
+Plot a bar chart showing the count of each fuel-type.,Bar,fuel-type,Easy
+Show a boxplot of peak-rpm grouped by engine-location to find outliers.,Boxplot,"engine-location, peak-rpm",Hard
+Show a boxplot of normalized-losses grouped by make to find outliers.,Boxplot,"make, normalized-losses",Hard
+Draw a scatter plot comparing curb-weight and peak-rpm.,Scatter,"curb-weight, peak-rpm",Medium
+Draw a scatter plot comparing normalized-losses and wheel-base.,Scatter,"normalized-losses, wheel-base",Medium
+Plot a bar chart showing the count of each fuel-type.,Bar,fuel-type,Easy
+Plot the mean horsepower grouped by engine-location.,Bar,"engine-location, horsepower",Medium
+Plot the mean stroke grouped by body-style.,Bar,"body-style, stroke",Medium
+Visualize the distribution of horsepower using a histogram.,Histogram,horsepower,Easy
+Draw a scatter plot comparing highway-mpg and price.,Scatter,"highway-mpg, price",Medium
+Show a bar chart of the average stroke for each fuel-type.,Bar,"fuel-type, stroke",Medium
+Plot the mean horsepower grouped by aspiration.,Bar,"aspiration, horsepower",Medium
+Visualize the distribution of peak-rpm using a histogram.,Histogram,peak-rpm,Easy
+Show a boxplot of normalized-losses grouped by make to find outliers.,Boxplot,"make, normalized-losses",Hard
+Show a bar chart of the average width for each num-of-doors.,Bar,"num-of-doors, width",Medium
+Show the relationship between wheel-base and engine-size.,Scatter,"wheel-base, engine-size",Medium
+Show a bar chart of the average engine-size for each aspiration.,Bar,"aspiration, engine-size",Medium
+Show a boxplot of horsepower grouped by aspiration to find outliers.,Boxplot,"aspiration, horsepower",Hard
+Show the relationship between height and curb-weight.,Scatter,"height, curb-weight",Medium
+Show a boxplot of engine-size grouped by aspiration to find outliers.,Boxplot,"aspiration, engine-size",Hard
+Plot the mean stroke grouped by body-style.,Bar,"body-style, stroke",Medium
+Plot the mean city-mpg grouped by num-of-doors.,Bar,"num-of-doors, city-mpg",Medium
+Visualize the distribution of height using a histogram.,Histogram,height,Easy
+Show a bar chart of the average city-mpg for each num-of-cylinders.,Bar,"num-of-cylinders, city-mpg",Medium
+Show a bar chart of the average city-mpg for each num-of-cylinders.,Bar,"num-of-cylinders, city-mpg",Medium
+Draw a scatter plot comparing height and compression-ratio.,Scatter,"height, compression-ratio",Medium
+Show a bar chart of the average city-mpg for each num-of-cylinders.,Bar,"num-of-cylinders, city-mpg",Medium
+Draw a scatter plot comparing bore and price.,Scatter,"bore, price",Medium
+Show a boxplot of normalized-losses grouped by make to find outliers.,Boxplot,"make, normalized-losses",Hard
+Draw a scatter plot comparing normalized-losses and stroke.,Scatter,"normalized-losses, stroke",Medium
+Plot the mean horsepower grouped by engine-location.,Bar,"engine-location, horsepower",Medium
+Visualize the frequency of aspiration using a bar plot.,Bar,aspiration,Easy
+Plot the mean height grouped by engine-type.,Bar,"engine-type, height",Medium
+Draw a scatter plot comparing bore and price.,Scatter,"bore, price",Medium
+Plot a bar chart showing the count of each engine-location.,Bar,engine-location,Easy
+Visualize the distribution of horsepower using a histogram.,Histogram,horsepower,Easy
+Show a boxplot of wheel-base grouped by make to find outliers.,Boxplot,"make, wheel-base",Hard
+Show the relationship between engine-size and price.,Scatter,"engine-size, price",Medium
+Visualize the distribution of bore using a histogram.,Histogram,bore,Easy
+Plot a bar chart showing the count of each num-of-doors.,Bar,num-of-doors,Easy
+Show a bar chart of the average width for each num-of-doors.,Bar,"num-of-doors, width",Medium
+Plot the mean stroke grouped by body-style.,Bar,"body-style, stroke",Medium
+Visualize the distribution of width using a histogram.,Histogram,width,Easy
+Visualize the frequency of num-of-cylinders using a bar plot.,Bar,num-of-cylinders,Easy
+Show a boxplot of width grouped by num-of-doors to find outliers.,Boxplot,"num-of-doors, width",Hard
+Draw a scatter plot comparing width and engine-size.,Scatter,"width, engine-size",Medium
+Plot a bar chart showing the count of each fuel-type.,Bar,fuel-type,Easy
+Show a boxplot of engine-size grouped by drive-wheels to find outliers.,Boxplot,"drive-wheels, engine-size",Hard
+Show a boxplot of engine-size grouped by aspiration to find outliers.,Boxplot,"aspiration, engine-size",Hard
+Plot the mean stroke grouped by body-style.,Bar,"body-style, stroke",Medium
+Show a boxplot of stroke grouped by fuel-system to find outliers.,Boxplot,"fuel-system, stroke",Hard
+Draw a scatter plot comparing compression-ratio and highway-mpg.,Scatter,"compression-ratio, highway-mpg",Medium
+Plot a bar chart showing the count of each engine-type.,Bar,engine-type,Easy
+Draw a scatter plot comparing height and compression-ratio.,Scatter,"height, compression-ratio",Medium
+Draw a scatter plot comparing height and peak-rpm.,Scatter,"height, peak-rpm",Medium
+Show a bar chart of the average width for each engine-type.,Bar,"engine-type, width",Medium
+Show a boxplot of city-mpg grouped by num-of-doors to find outliers.,Boxplot,"num-of-doors, city-mpg",Hard
+Show the relationship between height and engine-size.,Scatter,"height, engine-size",Medium
+Show the relationship between length and height.,Scatter,"length, height",Medium
+Show a boxplot of width grouped by aspiration to find outliers.,Boxplot,"aspiration, width",Hard
+Plot a bar chart showing the count of each num-of-doors.,Bar,num-of-doors,Easy
+Plot a bar chart showing the count of each fuel-type.,Bar,fuel-type,Easy
+Plot a bar chart showing the count of each drive-wheels.,Bar,drive-wheels,Easy
+Draw a scatter plot comparing wheel-base and peak-rpm.,Scatter,"wheel-base, peak-rpm",Medium
+Show a boxplot of compression-ratio grouped by make to find outliers.,Boxplot,"make, compression-ratio",Hard
+Plot a bar chart showing the count of each num-of-doors.,Bar,num-of-doors,Easy
+Draw a scatter plot comparing wheel-base and peak-rpm.,Scatter,"wheel-base, peak-rpm",Medium
+Show a bar chart of the average wheel-base for each num-of-cylinders.,Bar,"num-of-cylinders, wheel-base",Medium
+Show a boxplot of city-mpg grouped by num-of-cylinders to find outliers.,Boxplot,"num-of-cylinders, city-mpg",Hard
+Visualize the distribution of bore using a histogram.,Histogram,bore,Easy
+Show a boxplot of width grouped by num-of-doors to find outliers.,Boxplot,"num-of-doors, width",Hard
+Draw a scatter plot comparing compression-ratio and highway-mpg.,Scatter,"compression-ratio, highway-mpg",Medium
+Show the relationship between normalized-losses and bore.,Scatter,"normalized-losses, bore",Medium
+Show a bar chart of the average price for each fuel-type.,Bar,"fuel-type, price",Medium
+Show a bar chart of the average city-mpg for each num-of-cylinders.,Bar,"num-of-cylinders, city-mpg",Medium
+Show a boxplot of normalized-losses grouped by engine-location to find outliers.,Boxplot,"engine-location, normalized-losses",Hard
+Visualize the distribution of width using a histogram.,Histogram,width,Easy
+Plot the mean bore grouped by engine-location.,Bar,"engine-location, bore",Medium
+Draw a scatter plot comparing curb-weight and stroke.,Scatter,"curb-weight, stroke",Medium
+Visualize the distribution of height using a histogram.,Histogram,height,Easy
