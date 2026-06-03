@@ -1,54 +1,17 @@
 import re
 import sys
-import os
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-import numpy as np
 from openai import OpenAI
 from difflib import SequenceMatcher
 
-# 9Router combo model đã được cấu hình trên local web.
-# Model "Cline" tự fallback theo cấu hình của 9Router, không cần fallback thủ công trong code.
-SELECTED_MODEL = "Cline"
-
-# API key cho 9Router local
-API_KEY = os.getenv("NINEROUTER_API_KEY", "sk-b3062a96fb131ad4-z8mnz7-f6b64e72")
-
-# API configuration for 9router
-API_CONFIG = {
-    "base_url": "http://localhost:20128/v1",  # Endpoint của 9router
-}
-
-# Initialize client for 9router
+# Khởi tạo client OpenAI với cấu hình Local LLM Proxy
 client = OpenAI(
-    api_key=API_KEY,
-    base_url=API_CONFIG["base_url"]
+    api_key="freellmapi-fe1244540184bfbbf1c2865f09560591d9f660a0315e499a",
+    base_url="http://localhost:3001/v1"
 )
 
 # Đường dẫn file CSV
 CSV_PATH = r"C:\Users\DELL\Downloads\archive\Automobile_data.csv"
-
-# Compile regex patterns một lần để trích xuất code nhanh hơn ở mỗi request
-CODE_BLOCK_PATTERNS = [
-    re.compile(r"```python\s*\n(.*?)\n```", re.DOTALL),
-    re.compile(r"```python(.*?)```", re.DOTALL),
-    re.compile(r"```\s*\n(.*?)\n```", re.DOTALL),
-    re.compile(r"```(.*?)```", re.DOTALL),
-]
-
-
-def extract_python_code(result_text):
-    """
-    Trích xuất code Python từ response của LLM.
-    Giữ nguyên thứ tự ưu tiên pattern như logic cũ nhưng tránh compile regex lặp lại.
-    """
-    for pattern in CODE_BLOCK_PATTERNS:
-        matches = pattern.findall(result_text)
-        if matches:
-            return matches[0].strip()
-
-    return None
 
 class MiniRAGSystem:
     """
@@ -234,20 +197,13 @@ def generate_and_run_chart(user_prompt, df, rag_system):
         rag_system (MiniRAGSystem): Mini-RAG system instance
     """
     
-    # System Prompt bắt buộc AI đóng vai chuyên gia Data Science với các hạn chế bảo mật
+    # System Prompt bắt buộc AI đóng vai chuyên gia Data Science
     system_prompt = """Bạn là một chuyên gia Data Science. 
-
-QUY TẮC NGHIÊM NGẶT:
-1. CHỈ sinh code Python thuần túy để VẼ BIỂU ĐỒ, KHÔNG làm gì khác
-2. Dữ liệu đã được load vào biến 'df' - CHỈ sử dụng biến này, không đọc file khác
-3. CHỈ sử dụng các thư viện sau: pandas, matplotlib, seaborn, numpy
-4. KHÔNG sử dụng: os, sys, subprocess, requests, urllib, open, file operations
-5. KHÔNG giải thích, KHÔNG viết text ngoài code
-6. KHÔNG cài đặt package, KHÔNG import thư viện ngoài danh sách trên
-7. Code PHẢI được bọc trong ```python và ```
-8. Nếu không thể vẽ biểu đồ, trả về thông báo rõ ràng trong code
-
-BẮT ĐẦU CODE:"""
+Khi được yêu cầu, hãy trả về CHỈ mã code Python thuần túy để vẽ biểu đồ.
+Sử dụng Pandas, Matplotlib, hoặc Seaborn.
+TUYỆT ĐỐI KHÔNG giải thích dài dòng, KHÔNG viết text ngoài code.
+Bọc code trong cặp thẻ ```python và ```
+Dữ liệu đã được load vào biến 'df', bạn có thể sử dụng trực tiếp."""
     
     # ==== MINI-RAG RETRIEVAL ====
     print("[*] Mini-RAG: Retrieving relevant context...")
@@ -257,31 +213,39 @@ BẮT ĐẦU CODE:"""
     # Kết hợp context dữ liệu và user prompt
     full_prompt = f"""{data_context}
 
-Yêu cầu: {user_prompt}
-
-LƯU Ý: Chỉ trả về code Python thuần túy, không giải thích gì thêm."""
+Yêu cầu: {user_prompt}"""
     
     try:
-        # Gọi API sử dụng OpenAI SDK
-        print("[*] Đang gọi API 9Router...")
+        # Gọi API với model "auto"
+        print("[*] Đang gọi API LLM Proxy...")
         response = client.chat.completions.create(
-            model=SELECTED_MODEL,
+            model="deepseek-chat",
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": full_prompt}
-            ],
-            temperature=0
+            ]
         )
         
+        # Lấy kết quả từ API
         result_text = response.choices[0].message.content
         print("[✓] Nhận response từ API\n")
         
-        # Trích xuất code từ response
-        extracted_code = extract_python_code(result_text)
-        if not extracted_code:
-            print("[✗] Lỗi: Không tìm thấy code trong response")
+        # Trích xuất code nằm giữa ```python và ```
+        # Regex: \`\`\`python(.*?)\`\`\`
+        pattern = r"```python\s*\n(.*?)\n```"
+        matches = re.findall(pattern, result_text, re.DOTALL)
+        
+        if not matches:
+            # Thử pattern khác nếu không tìm thấy
+            pattern = r"```python(.*?)```"
+            matches = re.findall(pattern, result_text, re.DOTALL)
+        
+        if not matches:
+            print("[✗] Lỗi: Không tìm thấy code giữa thẻ ```python và ```")
             print(f"[DEBUG] Response nhận được:\n{result_text}")
             return
+        
+        extracted_code = matches[0].strip()
         
         # In đoạn code đã bóc tách ra console
         print("=" * 60)
@@ -290,16 +254,16 @@ LƯU Ý: Chỉ trả về code Python thuần túy, không giải thích gì th�
         print(extracted_code)
         print("=" * 60 + "\n")
         
-        # CẢNH BÁO: Chạy code do AI sinh ra có thể không an toàn
-        # Đây là project demo nên vẫn cho phép chạy, nhưng trong production cần validation
+        # Thực thi code bằng exec() với try-except bắt lỗi
+        # Cung cấp DataFrame 'df' trong execution context
         print("[*] Đang thực thi code...\n")
         try:
             exec_globals = {
-                'df': df,  # DataFrame chứa dữ liệu
-                'pd': pd,  # Pandas library
-                'plt': plt,  # Matplotlib pyplot đã import sẵn
-                'sns': sns,  # Seaborn library đã import sẵn
-                'np': np,  # Numpy library đã import sẵn
+                'df': df,
+                'pd': pd,
+                'plt': __import__('matplotlib.pyplot', fromlist=['pyplot']),
+                'sns': __import__('seaborn', fromlist=['seaborn']),
+                'np': __import__('numpy', fromlist=['numpy']),
             }
             exec(extracted_code, exec_globals)
             print("\n[✓] Code thực thi thành công!")
@@ -314,27 +278,15 @@ LƯU Ý: Chỉ trả về code Python thuần túy, không giải thích gì th�
 
 
 if __name__ == "__main__":
-    # Xử lý argument cho file CSV
-    csv_path = CSV_PATH  # Mặc định
-    if len(sys.argv) > 1:
-        csv_path = sys.argv[1]
-        print(f"[*] Sử dụng file CSV từ argument: {csv_path}")
-    else:
-        print(f"[*] Sử dụng file CSV mặc định: {csv_path}")
-    
     # Load dữ liệu và khởi tạo Mini-RAG System
-    print("[*] Đang load dữ liệu...")
-    df, rag_system = load_and_analyze_data(csv_path)
+    print("[*] Đang load dữ liệu Automobile...")
+    df, rag_system = load_and_analyze_data(CSV_PATH)
     
-    # Hiển thị thông tin model cố định
+    # Nhập user prompt từ console
     print("=" * 60)
     print("[AUTOMOBILE DATA - MINI-RAG CHART GENERATOR]")
     print("=" * 60)
-    print(f"Model đang sử dụng: {SELECTED_MODEL}")
-    print("9Router sẽ tự fallback theo combo model đã cấu hình trên local web.")
-    print("=" * 60 + "\n")
     
-    # Nhập user prompt từ console
     while True:
         user_prompt = input("Nhập yêu cầu vẽ biểu đồ ('q' để quit): ").strip()
         
@@ -348,8 +300,7 @@ if __name__ == "__main__":
             print("[✗] Yêu cầu không hợp lệ, vui lòng nhập lại yêu cầu về vẽ biểu đồ.\n")
             continue
         
-        print(f"\nYêu cầu: {user_prompt}")
-        print(f"Model đang sử dụng: {SELECTED_MODEL}\n")
+        print(f"\nYêu cầu: {user_prompt}\n")
         
         # Gọi hàm generate_and_run_chart với mini-RAG system
         generate_and_run_chart(user_prompt, df, rag_system)
